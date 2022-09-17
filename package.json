@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "Photo blog",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "mustache data/site.json -p src/templates/partials/head.mustache -p src/templates/partials/nav.mustache src/templates/index.mustache > public/index.html"
+    "build": "node scripts/generateSite.js",
+    "build2": "mustache data/site.json -p src/templates/partials/head.mustache -p src/templates/partials/nav.mustache src/templates/index.mustache > public/index.html"
   },
   "repository": {
     "type": "git",
