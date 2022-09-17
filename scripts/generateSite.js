@@ -27,7 +27,7 @@ partialsDirectoryFiles.forEach((fileName) => {
 
 outputTemplateToFile('src/templates/index.mustache', 'public/index.html', siteData);
 
-siteData.posts.forEach((post) => {
+siteData.posts.reverse().forEach((post) => {
     outputTemplateToFile('src/templates/post.mustache', `public/${post.url}`, {
         ...siteData,
         title: `${siteData.title} = ${post.title}`,
