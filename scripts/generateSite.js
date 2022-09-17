@@ -3,11 +3,8 @@ import path from 'path';
 import fs from 'fs';
 import siteData from '../data/site.json' assert {type: 'json'};
 
-const templateDirectory = 'src/templates';
 const partialsDirectory = 'src/templates/partials';
-const outputDirectory = 'public';
-
-let partials = {};
+const partials = {};
 
 const partialsDirectoryFiles = fs.readdirSync(partialsDirectory);
 if (!partialsDirectoryFiles || !partialsDirectoryFiles.length) {
@@ -28,35 +25,21 @@ partialsDirectoryFiles.forEach((fileName) => {
     }
 });
 
+outputTemplateToFile('src/templates/index.mustache', 'public/index.html', siteData);
 
-const templateDirectoryFiles = fs.readdirSync(templateDirectory);
-if (!templateDirectoryFiles || !templateDirectoryFiles.length) {
-    console.error('could not file template files');
-    process.exit(0);
-}
-
-templateDirectoryFiles.forEach((fileName) => {
-    const filePath = path.join(templateDirectory, fileName);
-    const stats = fs.statSync(filePath);
-
-    if (stats.isFile() && fileName.indexOf('.mustache') > -1) {
-        outputTemplateToFile(filePath);
-    }
+siteData.posts.forEach((post) => {
+    outputTemplateToFile('src/templates/post.mustache', `public/${post.url}`, post);
 });
 
-function outputTemplateToFile(pathToTemplate) {
+function outputTemplateToFile(pathToTemplate, outputFilePath, data) {
     fs.readFile(pathToTemplate, 'utf8', (err, templateContents) => {
         if (err) {
             console.error(err);
             return;
         }
 
-        const parsedTemplate = Mustache.parse(templateContents);
-        const outputToWrite = Mustache.render(templateContents, siteData, partials);
-        const templatePathInformation = path.parse(pathToTemplate);
-        const pathToOutputFile = path.join(outputDirectory, `${templatePathInformation.name}.html`);
-
-        fs.writeFile(pathToOutputFile, outputToWrite, (err) => {
+        const outputToWrite = Mustache.render(templateContents, data, partials);
+        fs.writeFile(outputFilePath, outputToWrite, (err) => {
             if (err) {
                 console.error(err);
             }
