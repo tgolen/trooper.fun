@@ -1,0 +1,19 @@
+{
+  "name": "trooper.fun",
+  "version": "1.0.0",
+  "description": "Photo blog",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tgolen/trooper.fun.git"
+  },
+  "author": "Tim Golen <tim@golen.net>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tgolen/trooper.fun/issues"
+  },
+  "homepage": "https://github.com/tgolen/trooper.fun#readme"
+}
