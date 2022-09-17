@@ -4,7 +4,8 @@
   "description": "Photo blog",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "mustache data/posts.json src/templates/home.mustache > public/index.html"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/tgolen/trooper.fun/issues"
   },
-  "homepage": "https://github.com/tgolen/trooper.fun#readme"
+  "homepage": "https://github.com/tgolen/trooper.fun#readme",
+  "dependencies": {
+    "mustache": "^4.2.0"
+  }
 }
