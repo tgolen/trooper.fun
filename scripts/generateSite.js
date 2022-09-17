@@ -1,18 +1,19 @@
 import Mustache from 'mustache';
 import path from 'path';
 import fs from 'fs';
-import Stats from 'fs';
+import siteData from '../data/site.json' assert {type: 'json'};
 
-const pageDirectory = 'src/templates';
+const templateDirectory = 'src/templates';
+const outputDirectory = 'public';
 
-fs.readdir(pageDirectory, (err, files) => {
+fs.readdir(templateDirectory, (err, files) => {
     if (err) {
         console.error(err);
         return;
     }
 
     files.forEach((fileName) => {
-        const filePath = path.join(pageDirectory, fileName);
+        const filePath = path.join(templateDirectory, fileName);
         fs.stat(filePath, (err, stats) => {
             if (err) {
                 console.error(err);
@@ -28,6 +29,23 @@ fs.readdir(pageDirectory, (err, files) => {
 });
 
 function outputTemplateToFile(pathToTemplate) {
-    const pathInformation = path.parse(pathToTemplate);
-    console.log(pathInformation);
+    fs.readFile(pathToTemplate, 'utf8', (err, templateContents) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        console.log(templateContents)
+
+        const parsedTemplate = Mustache.parse(templateContents);
+        const outputToWrite = Mustache.render(parsedTemplate, siteData);
+        const templatePathInformation = path.parse(pathToTemplate);
+        const pathToOutputFile = path.join(outputDirectory, `${templatePathInformation.name}.html`);
+
+        fs.writeFile(pathToOutputFile, outputToWrite, (err) => {
+            if (err) {
+                console.error(err);
+            }
+        });
+    });
 }
