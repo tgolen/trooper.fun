@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "mustache data/site.json -p src/templates/partials/head.mustache src/templates/index.mustache > public/index.html"
+    "build": "mustache data/site.json -p src/templates/partials/head.mustache -p src/templates/partials/nav.mustache src/templates/index.mustache > public/index.html"
   },
   "repository": {
     "type": "git",
