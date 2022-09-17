@@ -1,3 +1,13 @@
 {
-    "title": "Trooper.fun Photo Blog"
+    "title": "Trooper.fun Photo Blog",
+    "posts": {
+        "20220917-0753": {
+            "title": "Post One",
+            "description": "This is the first post"
+        },
+        "20220917-0754": {
+            "title": "Post Two",
+            "description": "This is the second post"
+        }
+    }
 }
