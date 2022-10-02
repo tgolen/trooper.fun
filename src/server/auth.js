@@ -1,4 +1,4 @@
-import { config } from '../../config';
+import { config } from '../../config.js';
 import {Strategy as GoogleOAuthStrategy} from 'passport-google-oauth20';
 
 export const auth = (passport) => {
