@@ -4,15 +4,6 @@
   "description": "Photo blog",
   "main": "index.js",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node scripts/generateSite.js",
-    "build2": "mustache data/site.json -p src/templates/partials/head.mustache -p src/templates/partials/nav.mustache src/templates/index.mustache > public/index.html"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tgolen/trooper.fun.git"
-  },
   "author": "Tim Golen <tim@golen.net>",
   "license": "ISC",
   "bugs": {
@@ -20,6 +11,15 @@
   },
   "homepage": "https://github.com/tgolen/trooper.fun#readme",
   "dependencies": {
-    "mustache": "^4.2.0"
+    "mustache": "^4.2.0",
+    "passport": "^0.6.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node scripts/generateSite.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tgolen/trooper.fun.git"
   }
 }
