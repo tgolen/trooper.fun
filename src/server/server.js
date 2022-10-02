@@ -71,7 +71,7 @@ export default () => {
     // Start the server
     server.listen(config.port, () => {
         console.log(`App listening on port ${config.port}`);
-        console.log(`Open application: ${config.urlRoot}:${config.port}${config.appRoot}`);
+        console.log(`Open application: ${config.urlApp}`);
         console.log('Press Ctrl+C to quit.');
     });
 }
