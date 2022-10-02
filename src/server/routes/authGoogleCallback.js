@@ -3,7 +3,7 @@ export default (logger) => {
         // User has logged in.
         logger.info('User has logged in.');
         req.session.save(() => {
-          res.redirect('/');
+          res.redirect('/app');
         });
     }
 }

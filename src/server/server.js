@@ -6,11 +6,11 @@ import mustacheExpress from 'mustache-express';
 import path from 'path';
 import session from 'express-session';
 import sessionFileStore from 'session-file-store';
-import {fileURLToPath} from 'url';
+import { fileURLToPath } from 'url';
 
 import { auth } from './auth.js';
 import log from './log.js';
-import { config } from '../../config.js';
+import { config } from './config.js';
 
 import logout from './routes/logout.js';
 import authGoogle from './routes/authGoogle.js';
@@ -51,20 +51,19 @@ app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Register '.mustache' extension with The Mustache Express
-// app.engine('mustache', mustacheExpress());
+// Register '.mst' extension with The Mustache Express
 app.engine('mst', mustacheExpress(`${__dirname}/partials`, '.mst'));
 app.set('view engine', 'mst');
 app.set('views', `${__dirname}/views`);
 
-app.get('/', root);
-app.get('/logout', logout);
+app.get(`${config.appRoot}`, root);
+app.get(`${config.appRoot}/logout`, logout);
 
 // Star the OAuth login process for Google.
-app.get('/auth/google', authGoogle(passport));
+app.get(`${config.appRoot}/auth/google`, authGoogle(passport));
 
 // Callback receiver for the OAuth process after log in.
-app.get('/auth/google/callback',
+app.get(`${config.appRoot}/auth/google/callback`,
     passport.authenticate('google', {failureRedirect: '/', failureFlash: true, session: true}),
     authGoogleCallback(logger));
 
@@ -72,7 +71,7 @@ export default () => {
     // Start the server
     server.listen(config.port, () => {
         console.log(`App listening on port ${config.port}`);
-        console.log(`Open application: http://localhost:${config.port}`);
+        console.log(`Open application: ${config.urlRoot}:${config.port}${config.appRoot}`);
         console.log('Press Ctrl+C to quit.');
     });
 }

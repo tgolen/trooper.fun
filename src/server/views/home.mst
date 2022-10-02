@@ -4,6 +4,6 @@
     </head>
     <body>
         <h1>Home</h1>
-        <a href="/logout">Logout</a>
+        <a href="/app/logout">Logout</a>
     </body>
 </html>

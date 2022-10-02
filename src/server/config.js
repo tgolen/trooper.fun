@@ -11,10 +11,14 @@ config.oAuthclientSecret = process.env.GOOGLE_OAUTH_CLIENT_SECRET;
 
 // The callback to use for OAuth requests. This is the URL where the app is
 // running. For testing and running it locally, use 127.0.0.1.
-config.oAuthCallbackUrl = process.env.GOOGLE_OAUTH_CLIENT_CALLBACK_URL;
+config.oAuthCallbackUrl = `${process.env.SERVER_URL_ROOT}:${process.env.SERVER_PORT}${process.env.SERVER_APP_ROOT}/auth/google/callback`;
 
 // The port where the app should listen for requests.
-config.port = 8080;
+config.port = process.env.SERVER_PORT;
+
+config.urlRoot = process.env.SERVER_URL_ROOT;
+
+config.appRoot = process.env.SERVER_APP_ROOT;
 
 // The scopes to request. The app requires the photoslibrary.readonly and
 // plus.me scopes.
