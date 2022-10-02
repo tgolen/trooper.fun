@@ -1,4 +1,5 @@
-import {config} from '../config';
+import {config} from '../config.js';
+import fs from 'fs';
 
 export default (logger) => {
     return (req, res) => {
@@ -8,12 +9,18 @@ export default (logger) => {
             return;
         }
 
-        // User has logged in.
-        logger.info('User has logged in.');
+        fs.writeFile('./data/googleOauthToken', req.user.token, (err) => {
+            if (err) {
+                console.error(err);
+            }
 
-        // Save the oauth token to a file
-        req.session.save(() => {
-            res.redirect('/app');
+            // User has logged in.
+            logger.info('User has logged in.');
+    
+            // Save the oauth token to a file
+            req.session.save(() => {
+                res.redirect('/app');
+            });
         });
     }
 }
