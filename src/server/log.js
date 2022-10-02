@@ -15,7 +15,7 @@ const winstonLogger = winston.createLogger({
     ]
 });
 
-export const logger = (app) => {
+export default (app) => {
     // Enable extensive logging if the DEBUG environment variable is set.
     if (process.env.DEBUG) {
         // Print all winston log levels.
@@ -33,4 +33,5 @@ export const logger = (app) => {
         // By default, only print all 'verbose' log level messages or below.
         winstonLogger.level = 'verbose';
     }
+    return winstonLogger;
 };

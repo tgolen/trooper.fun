@@ -1,3 +1,4 @@
 node_modules
 .DS_Store
 scripts/icloud-session.json
+.env
