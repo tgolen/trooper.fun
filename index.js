@@ -1,1 +1,2 @@
-console.log('hello world')
+import server from 'src/server';
+server();

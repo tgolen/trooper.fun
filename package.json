@@ -11,8 +11,14 @@
   },
   "homepage": "https://github.com/tgolen/trooper.fun#readme",
   "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
     "mustache": "^4.2.0",
-    "passport": "^0.6.0"
+    "mustache-express": "^1.3.2",
+    "node-fetch": "^3.2.10",
+    "passport": "^0.6.0",
+    "passport-google-oauth20": "^2.0.0",
+    "winston": "^3.8.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
