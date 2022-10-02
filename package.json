@@ -24,7 +24,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node scripts/generateSite.js",
-    "start": "node index.js"
+    "start": "DEBUG=true node index.js"
   },
   "repository": {
     "type": "git",
