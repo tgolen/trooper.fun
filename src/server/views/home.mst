@@ -1,9 +1,19 @@
 <html>
     <head>
         <title>Home</title>
+
+        {{> head}} 
     </head>
     <body>
-        <h1>Home</h1>
-        <a href="/app/logout">Logout</a>
+        <main class="container">
+            <h1>Home</h1>
+            <a href="/app/logout" class="waves-effect waves-light btn-large">
+                Logout
+                <i class="material-icons left">cancel</i>
+            </a>
+            <p>
+                <code>{{token}}</code>
+            </p>
+        </main>
     </body>
 </html>

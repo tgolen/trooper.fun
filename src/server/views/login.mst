@@ -1,9 +1,16 @@
 <html>
     <head>
         <title>Login</title>
+
+        {{> head}}
     </head>
     <body>
-        <h1>Login</h1>
-        <a href="/app/auth/google">Login</a>
+        <main class="container">
+            <h1>Login</h1>
+            <a href="/app/auth/google" class="waves-effect waves-light btn-large">
+                Login
+                <i class="material-icons right">send</i>
+            </a>
+        </main>
     </body>
 </html>

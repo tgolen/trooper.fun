@@ -29,3 +29,5 @@ config.scopes = [
 
 // The API end point to use. Do not change.
 config.apiEndpoint = 'https://photoslibrary.googleapis.com';
+
+config.allowedDisplayName = process.env.GOOGLE_ALLOWED_DISPLAY_NAME;

@@ -3,6 +3,6 @@ export default (req, res) => {
         // Not logged in yet.
         res.render('login');
     } else {
-        res.render('home');
+        res.render('home', {token: 'test'});
     }
 };
