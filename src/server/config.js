@@ -3,6 +3,8 @@ dotenv.config();
 
 export const config = {};
 
+config.googleUserFilePath = './data/googleUser';
+
 // The OAuth client ID from the Google Developers console.
 config.oAuthClientID = process.env.GOOGLE_OAUTH_CLIENT_ID;
 

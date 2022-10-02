@@ -1,7 +1,8 @@
 import fs from 'fs';
+import { config } from '../config.js';
 
 export default (req, res) => {
-    fs.readFile('./data/googleOauthToken', 'utf8', (err, token) => {
+    fs.readFile(config.googleUserFilePath, 'utf8', (err, token) => {
         if (err && err.message.indexOf('no such file or directory') > -1) {
             // Need to login again
             res.render('login');
@@ -16,6 +17,6 @@ export default (req, res) => {
             return;
         }
         
-        res.render('home', {token: 'test'});
+        res.render('home');
     });
 };

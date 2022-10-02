@@ -1,7 +1,8 @@
 import fs from 'fs';
 import {config} from '../src/server/config.js';
+console.log(config.googleUserFilePath);
 
-fs.readFile('./data/googleOauthToken', 'utf8', (err, token) => {
+fs.readFile(config.googleUserFilePath, 'utf8', (err, googleUser) => {
     if (err && err.message.indexOf('no such file or directory') > -1) {
         console.error(`No Google AuthToken found. You need to generate a new one from ${config.urlApp}`);
         return;
@@ -9,5 +10,6 @@ fs.readFile('./data/googleOauthToken', 'utf8', (err, token) => {
 
     if (err) { console.error(err); return; }
 
-    console.log(token);
+    const user = JSON.parse(googleUser);
+    console.log(user);
 });

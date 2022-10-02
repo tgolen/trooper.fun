@@ -11,9 +11,6 @@
                 Logout
                 <i class="material-icons left">cancel</i>
             </a>
-            <p>
-                <code>{{token}}</code>
-            </p>
         </main>
     </body>
 </html>

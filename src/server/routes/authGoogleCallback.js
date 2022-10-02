@@ -1,5 +1,5 @@
-import {config} from '../config.js';
 import fs from 'fs';
+import {config} from '../config.js';
 
 export default (logger) => {
     return (req, res) => {
@@ -9,7 +9,7 @@ export default (logger) => {
             return;
         }
 
-        fs.writeFile('./data/googleOauthToken', req.user.token, (err) => {
+        fs.writeFile(config.googleUserFilePath, JSON.stringify(req.user), (err) => {
             if (err) {
                 console.error(err);
             }
