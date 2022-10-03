@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import request from 'request';
 
 import {config} from '../src/server/config.js';
-console.log(config.googleUserFilePath);
+import siteData from '../data/site.json' assert {type: 'json'};
 
 fs.readFile(config.googleUserFilePath, 'utf8', async (err, googleUser) => {
     if (err && err.message.indexOf('no such file or directory') > -1) {
@@ -39,6 +39,8 @@ fs.readFile(config.googleUserFilePath, 'utf8', async (err, googleUser) => {
         
             request(photo.baseUrl).pipe(fs.createWriteStream(`./data/photos/${photo.filename}`)).on('close', () => {
                 console.log('file saved:', photo.filename);
+                const data = JSON.stringify(siteData, null, 4);
+                fs.writeFileSync('./data/site.json', data);
             });
         });
     }
