@@ -1,6 +1,7 @@
 import fs from 'fs';
 import fetch from 'node-fetch';
 import request from 'request';
+import moment from 'moment';
 
 import {config} from '../src/server/config.js';
 import siteData from '../data/site.json' assert {type: 'json'};
@@ -33,11 +34,20 @@ fs.readFile(config.googleUserFilePath, 'utf8', async (err, googleUser) => {
 
     if (data && data.photos && data.photos.length) {
         const photo = data.photos[0];
+        console.log(photo);
+
         request.head(photo.baseUrl, function(err, res, body){
             console.log('content-type:', res.headers['content-type']);
             console.log('content-length:', res.headers['content-length']);
         
-            request(photo.baseUrl).pipe(fs.createWriteStream(`./data/photos/${photo.filename}`)).on('close', () => {
+            request(photo.baseUrl).pipe(fs.createWriteStream(`./public/photos/${photo.filename}`)).on('close', () => {
+                const createdOn = new moment(photo.mediaMetadata.creationTime);
+                const newPost = {
+                    title: moment.format('LL'),
+                    url: `${moment.format('YYYY-MM-DD')}.html`,
+                    description: '',
+                    pathToImage: `/photos/${photo.filename}`,
+                };
                 console.log('file saved:', photo.filename);
                 const data = JSON.stringify(siteData, null, 4);
                 fs.writeFileSync('./data/site.json', data);
