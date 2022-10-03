@@ -1,5 +1,7 @@
 import fs from 'fs';
 import fetch from 'node-fetch';
+import request from 'request';
+
 import {config} from '../src/server/config.js';
 console.log(config.googleUserFilePath);
 
@@ -29,7 +31,18 @@ fs.readFile(config.googleUserFilePath, 'utf8', async (err, googleUser) => {
     // Submit the search request to the API and wait for the result.
     const data = await libraryApiSearch(authToken, parameters);
 
-    console.log(data.photos.length);
+    if (data && data.photos && data.photos.length) {
+        const photo = data.photos[0];
+        request.head(photo.baseUrl, function(err, res, body){
+            console.log('content-type:', res.headers['content-type']);
+            console.log('content-length:', res.headers['content-length']);
+        
+            request(photo.baseUrl).pipe(fs.createWriteStream(`./data/photos/${photo.filename}`)).on('close', () => {
+                console.log('file saved:', photo.filename);
+            });
+        });
+    }
+
 
     // console.log('Loading albums from API.');
 
@@ -63,7 +76,7 @@ async function libraryApiSearch(authToken, parameters) {
     let nextPageToken = null;
     let error = null;
   
-    parameters.pageSize = 50;
+    parameters.pageSize = 100;
   
     try {
       // Loop while the number of photos threshold has not been met yet
@@ -189,6 +202,9 @@ async function checkStatus(response){
             message = await response.json();
         } catch( err ){
             // Ignore if no JSON payload was retrieved and use the status text instead.
+        }
+        if (response.status === 401) {
+            throw new Error('auth token expired');
         }
         throw new Error('cannot parse response', response);
     }
