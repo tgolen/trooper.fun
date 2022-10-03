@@ -5,6 +5,8 @@ export const config = {};
 
 config.googleUserFilePath = './data/googleUser';
 
+config.albumID = 'APUIgiM1r4vrWZEibDLRAAmQJtm6JCqnugkcoRjwtkx4wC7WiCME9XpdOO2u_v-M0txx_n7OblT_';
+
 // The OAuth client ID from the Google Developers console.
 config.oAuthClientID = process.env.GOOGLE_OAUTH_CLIENT_ID;
 
