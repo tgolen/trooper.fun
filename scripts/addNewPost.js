@@ -2,6 +2,7 @@ import fs from 'fs';
 import fetch from 'node-fetch';
 import request from 'request';
 import moment from 'moment';
+import {google} from 'googleapis';
 
 import {config} from '../src/server/config.js';
 import siteData from '../data/site.json' assert {type: 'json'};
@@ -240,27 +241,38 @@ async function checkStatus(response, retry){
             // Ignore if no JSON payload was retrieved and use the status text instead.
         }
         if (response.status === 401) {
-
-            // Use the refresh token to get a new authToken
-            const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    client_id: config.client_id,
-                    client_secret: config.client_secret,
-                    refresh_token: user.refreshToken,
-                    grant_type: 'refresh_token',
-                })
+            const oAuth2Client = new google.auth.OAuth2(
+                config.oAuthClientID, 
+                config.oAuthclientSecret, 
+                config.oAuthCallbackUrl,
+            );
+            oAuth2Client.setCredentials({
+                refresh_token: user.refreshToken,
             });
+            const tokens = await oAuth2Client.refreshAccessToken();
+            console.log('YAYYYYYY! Token is refreshed!!!', tokens);
 
-            console.log(tokenResponse);
+            // // Use the refresh token to get a new authToken
+            // const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+            //     method: 'post',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({
+            //         client_id: config.client_id,
+            //         client_secret: config.client_secret,
+            //         refresh_token: user.refreshToken,
+            //         grant_type: 'refresh_token',
+            //     })
+            // });
+
+            // console.log(tokenResponse);
 
             // Save the new authToken to our user file
-            // user.token = tokenResponse.access_token;
-            // fs.writeFileSync('./data/googleUser', JSON.stringify(user));
-            // retry();
+            user.token = tokens.credentials.access_token;
+            fs.writeFileSync('./data/googleUser', JSON.stringify(user));
+            retry();
+            return;
 
             throw new Error('auth token expired');
         }
