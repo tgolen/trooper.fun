@@ -64,7 +64,11 @@ app.get(`${config.appRoot}/auth/google`, authGoogle(passport));
 
 // Callback receiver for the OAuth process after log in.
 app.get(`${config.appRoot}/auth/google/callback`,
-    passport.authenticate('google', {failureRedirect: '/', failureFlash: true, session: true}),
+    passport.authenticate('google', {
+        failureRedirect: '/', 
+        failureFlash: true, 
+        session: true,
+    }),
     authGoogleCallback(logger));
 
 export default () => {
