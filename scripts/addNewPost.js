@@ -41,13 +41,14 @@ fs.readFile(config.googleUserFilePath, 'utf8', async (err, googleUser) => {
             console.log('content-length:', res.headers['content-length']);
         
             request(photo.baseUrl).pipe(fs.createWriteStream(`./public/photos/${photo.filename}`)).on('close', () => {
-                const createdOn = new moment(photo.mediaMetadata.creationTime);
+                const createdOn = moment(photo.mediaMetadata.creationTime);
                 const newPost = {
-                    title: moment.format('LL'),
-                    url: `${moment.format('YYYY-MM-DD')}.html`,
+                    title: createdOn.format('LL'),
+                    url: `${createdOn.format('YYYY-MM-DD')}.html`,
                     description: '',
                     pathToImage: `/photos/${photo.filename}`,
                 };
+                siteData.posts.push(newPost);
                 console.log('file saved:', photo.filename);
                 const data = JSON.stringify(siteData, null, 4);
                 fs.writeFileSync('./data/site.json', data);

@@ -2,14 +2,10 @@
     "title": "Trooper.fun Photo Blog",
     "posts": [
         {
-            "title": "Post One",
-            "url": "post-one.html",
-            "description": "This is the first post"
-        },
-        {
-            "title": "Post Two",
-            "url": "post-two.html",
-            "description": "This is the second post"
+            "title": "April 9, 2015",
+            "url": "2015-04-09.html",
+            "description": "",
+            "pathToImage": "/photos/IMG_1670.jpeg"
         }
     ]
 }
