@@ -3,5 +3,5 @@ node_modules
 scripts/icloud-session.json
 .env
 data/googleUser
-public/photos/*
+public/
 sessions/
