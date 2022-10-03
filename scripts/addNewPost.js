@@ -6,6 +6,8 @@ import moment from 'moment';
 import {config} from '../src/server/config.js';
 import siteData from '../data/site.json' assert {type: 'json'};
 
+let user;
+
 fs.readFile(config.googleUserFilePath, 'utf8', async (err, googleUser) => {
     if (err && err.message.indexOf('no such file or directory') > -1) {
         console.error(`No Google AuthToken found. You need to generate a new one from ${config.urlApp}`);
@@ -14,12 +16,11 @@ fs.readFile(config.googleUserFilePath, 'utf8', async (err, googleUser) => {
 
     if (err) { console.error(err); return; }
 
-    const user = JSON.parse(googleUser);
+    user = JSON.parse(googleUser);
 
 
     const albumId = config.albumID;
     const userId = user.profile.id;
-    const authToken = user.token;
 
     console.log(`Importing album: ${albumId}`);
 
@@ -30,7 +31,7 @@ fs.readFile(config.googleUserFilePath, 'utf8', async (err, googleUser) => {
     const parameters = {albumId};
 
     // Submit the search request to the API and wait for the result.
-    const data = await libraryApiSearch(authToken, parameters);
+    const data = await libraryApiSearch(user.token, parameters);
 
     if (data && data.photos && data.photos.length) {
         const photo = data.photos[0];
@@ -108,7 +109,9 @@ async function libraryApiSearch(authToken, parameters) {
             body: JSON.stringify(parameters)
           });
   
-        const result = await checkStatus(searchResponse);
+        const result = await checkStatus(searchResponse, async () => {
+            return await libraryApiSearch(user.token, parameters);
+        });
   
         // console.log(`Response: ${result}`);
   
@@ -206,7 +209,7 @@ async function libraryApiGetAlbums(authToken) {
   }
 
 // Return the body as JSON if the request was successful, or thrown a StatusError.
-async function checkStatus(response){
+async function checkStatus(response, retry){
     if (!response.ok){
         // Throw a StatusError if a non-OK HTTP status was returned.
         let message = "";
@@ -217,6 +220,29 @@ async function checkStatus(response){
             // Ignore if no JSON payload was retrieved and use the status text instead.
         }
         if (response.status === 401) {
+
+            // Use the refresh token to get a new authToken
+            const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    client_id: config.client_id,
+                    client_secret: config.client_secret,
+                    refresh_token: user.refreshToken,
+                    grant_type: 'refresh_token',
+                })
+            });
+
+            console.log(tokenResponse);
+
+            // Save the new authToken to our user file
+            user.token = response.access_token;
+            // const data = JSON.stringify(user, null, 4);
+            // fs.writeFileSync('./data/googleUser', data);
+            // retry();
+
             throw new Error('auth token expired');
         }
         throw new Error('cannot parse response', response);

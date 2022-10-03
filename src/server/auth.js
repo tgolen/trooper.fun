@@ -10,5 +10,5 @@ export const auth = (passport) => {
         clientSecret: config.oAuthclientSecret,
         callbackURL: config.oAuthCallbackUrl
       },
-      (token, refreshToken, profile, done) => done(null, {profile, token})));
+      (token, refreshToken, profile, done) => done(null, {profile, token, refreshToken})));
 };
