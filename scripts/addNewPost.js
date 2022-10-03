@@ -34,7 +34,25 @@ fs.readFile(config.googleUserFilePath, 'utf8', async (err, googleUser) => {
     const data = await libraryApiSearch(user.token, parameters);
 
     if (data && data.photos && data.photos.length) {
-        const photo = data.photos[0];
+
+        // Find a photo that doesn't have a post created for it yet
+        let photo;
+        data.photos.forEach((photoData) => {
+            if (photo) return;
+            let photoHasPost = false;
+            siteData.posts.forEach((post) => {
+                if (photoHasPost) return;
+                photoHasPost = post.pathToImage.indexOf(photoData.filename) > -1;
+            });
+            if (!photoHasPost) {
+                photo = photoData;
+            }
+        });
+
+        if (!photo) {
+            console.log('New new photos found to post');
+            return;
+        }
         console.log(photo);
 
         request.head(photo.baseUrl, function(err, res, body){
@@ -43,9 +61,11 @@ fs.readFile(config.googleUserFilePath, 'utf8', async (err, googleUser) => {
         
             request(photo.baseUrl).pipe(fs.createWriteStream(`./public/photos/${photo.filename}`)).on('close', () => {
                 const createdOn = moment(photo.mediaMetadata.creationTime);
+                const fileNameArray = photo.filename.split('.');
+                const fileNameWithoutExtension = fileNameArray[0];
                 const newPost = {
-                    title: createdOn.format('LL'),
-                    url: `${createdOn.format('YYYY-MM-DD')}.html`,
+                    title: `${createdOn.format('LL')} - ${fileNameWithoutExtension}`,
+                    url: `${createdOn.format('YYYY-MM-DD')}_${fileNameWithoutExtension}.html`,
                     description: '',
                     pathToImage: `/photos/${photo.filename}`,
                 };
@@ -238,9 +258,8 @@ async function checkStatus(response, retry){
             console.log(tokenResponse);
 
             // Save the new authToken to our user file
-            user.token = response.access_token;
-            // const data = JSON.stringify(user, null, 4);
-            // fs.writeFileSync('./data/googleUser', data);
+            // user.token = tokenResponse.access_token;
+            // fs.writeFileSync('./data/googleUser', JSON.stringify(user));
             // retry();
 
             throw new Error('auth token expired');
