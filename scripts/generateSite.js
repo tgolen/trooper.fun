@@ -4,7 +4,7 @@ import fs from 'fs';
 import siteData from '../data/site.json' assert {type: 'json'};
 import { config } from '../src/server/config.js';
 
-const partialsDirectory = 'src/templates/partials';
+const partialsDirectory = 'src/site/partials';
 const partials = {};
 
 const partialsDirectoryFiles = fs.readdirSync(partialsDirectory);
@@ -26,10 +26,10 @@ partialsDirectoryFiles.forEach((fileName) => {
     }
 });
 
-outputTemplateToFile('src/templates/index.mustache', `${config.pathToWebRoot}/index.html`, siteData);
+outputTemplateToFile('src/site/index.mustache', `${config.pathToWebRoot}/index.html`, siteData);
 
 siteData.posts.reverse().forEach((post) => {
-    outputTemplateToFile('src/templates/post.mustache', `${config.pathToWebRoot}/${post.url}`, {
+    outputTemplateToFile('src/site/post.mustache', `${config.pathToWebRoot}/${post.url}`, {
         ...siteData,
         title: `${siteData.title} = ${post.title}`,
         post: post

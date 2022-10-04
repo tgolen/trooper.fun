@@ -31,6 +31,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node scripts/generateSite.js",
     "post": "node scripts/addNewPost.js",
+    "post-and-build": "node scripts/addNewPost.js ; node scripts/generateSite.js",
     "start": "node index.js"
   },
   "repository": {
