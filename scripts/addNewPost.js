@@ -41,10 +41,12 @@ fs.readFile(config.googleUserFilePath, 'utf8', async (err, googleUser) => {
         data.photos.forEach((photoData) => {
             if (photo) return;
             let photoHasPost = false;
-            siteData.posts.forEach((post) => {
-                if (photoHasPost) return;
-                photoHasPost = post.pathToImage.indexOf(photoData.filename) > -1;
-            });
+            if (siteData.posts.length) {
+                siteData.posts.forEach((post) => {
+                    if (photoHasPost) return;
+                    photoHasPost = post.pathToImage.indexOf(photoData.filename) > -1;
+                });
+            }   
             if (!photoHasPost) {
                 photo = photoData;
             }
@@ -76,7 +78,10 @@ fs.readFile(config.googleUserFilePath, 'utf8', async (err, googleUser) => {
                 fs.writeFileSync('./data/site.json', data);
             });
         });
+        return;
     }
+
+    console.log('No photos found', data);
 
 
     // console.log('Loading albums from API.');
@@ -151,7 +156,7 @@ async function libraryApiSearch(authToken, parameters) {
         photos = photos.concat(items);
   
         // Set the pageToken for the next request.
-        parameters.pageToken = result.nextPageToken;
+        parameters.pageToken = (result && result.nextPageToken) || null; 
   
         console.log(
             `Found ${items.length} images in this request. Total images: ${
@@ -250,7 +255,7 @@ async function checkStatus(response, retry){
                 refresh_token: user.refreshToken,
             });
             const tokens = await oAuth2Client.refreshAccessToken();
-            console.log('YAYYYYYY! Token is refreshed!!!', tokens);
+            console.log('YAYYYYYY! Token is refreshed!!!');
 
             // // Use the refresh token to get a new authToken
             // const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
