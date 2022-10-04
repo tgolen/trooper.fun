@@ -62,7 +62,7 @@ fs.readFile(config.googleUserFilePath, 'utf8', async (err, googleUser) => {
             console.log('content-type:', res.headers['content-type']);
             console.log('content-length:', res.headers['content-length']);
         
-            request(photo.baseUrl).pipe(fs.createWriteStream(`./public/photos/${photo.filename}`)).on('close', () => {
+            request(photo.baseUrl).pipe(fs.createWriteStream(`${config.pathToWebRoot}/photos/${photo.filename}`)).on('close', () => {
                 const createdOn = moment(photo.mediaMetadata.creationTime);
                 const fileNameArray = photo.filename.split('.');
                 const fileNameWithoutExtension = fileNameArray[0];

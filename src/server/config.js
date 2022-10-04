@@ -26,6 +26,8 @@ config.appRoot = process.env.SERVER_APP_ROOT;
 
 config.urlApp = `${process.env.SERVER_URL_ROOT}:${process.env.SERVER_PORT}${process.env.SERVER_APP_ROOT}`;
 
+config.pathToWebRoot = process.env.PATH_TO_WEB_ROOT;
+
 // The scopes to request. The app requires the photoslibrary.readonly and
 // plus.me scopes.
 config.scopes = [
