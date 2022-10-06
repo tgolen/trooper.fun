@@ -28,9 +28,14 @@ partialsDirectoryFiles.forEach((fileName) => {
 
 siteData.posts.reverse();
 
+const nextPost = siteData.posts.length < 2
+? null
+: siteData.posts[1];
 outputTemplateToFile('src/site/index.mustache', `${config.pathToWebRoot}/index.html`, {
     ...siteData,
     posts: siteData.posts.slice(0, 10),
+    post: siteData.posts.length ? siteData.posts[0] : null,
+    nextPost,
 });
 
 let i = 0;

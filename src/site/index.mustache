@@ -7,6 +7,28 @@
 
             <div class="row">
                 <div class="col s12 m6">
+                    <p class="center-align">
+                        <div class="row">
+                            <div class="col s6 left-align">
+                                {{#prevPost}}
+                                <a href="{{prevPost.url}}" class="waves-effect waves-light btn-flat">
+                                    <i class="material-icons left">arrow_back</i>
+                                    Prev
+                                </a>
+                                {{/prevPost}}
+                            </div>
+                            <div class="col s6 right-align">
+                                {{#nextPost}}
+                                <a href="{{nextPost.url}}" class="waves-effect waves-light btn-flat">
+                                    <i class="material-icons right">arrow_forward</i>
+                                    Next
+                                </a>
+                                {{/nextPost}}
+                            </div>
+                        </div>
+                        
+                        <img class="responsive-img" src="./{{post.pathToImage}}" alt="{{post.title}}" />
+                    </p>
                 </div>
                 
                 <div class="col s12 m6">
