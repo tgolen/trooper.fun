@@ -26,14 +26,30 @@ partialsDirectoryFiles.forEach((fileName) => {
     }
 });
 
-outputTemplateToFile('src/site/index.mustache', `${config.pathToWebRoot}/index.html`, siteData);
+siteData.posts.reverse();
 
-siteData.posts.reverse().forEach((post) => {
+outputTemplateToFile('src/site/index.mustache', `${config.pathToWebRoot}/index.html`, {
+    ...siteData,
+    posts: siteData.posts.slice(0, 10),
+});
+
+let i = 0;
+siteData.posts.forEach((post) => {
+    const prevPost = i === 0
+        ? null
+        : siteData.posts[i - 1];
+    const nextPost = i === siteData.posts.length
+        ? null
+        : siteData.posts[i + 1];
     outputTemplateToFile('src/site/post.mustache', `${config.pathToWebRoot}/${post.url}`, {
         ...siteData,
         title: `${siteData.title} = ${post.title}`,
-        post: post
+        post,
+        prevPost,
+        nextPost,
+        posts: siteData.posts.slice(0, 10),
     });
+    i++;
 });
 
 function outputTemplateToFile(pathToTemplate, outputFilePath, data) {
