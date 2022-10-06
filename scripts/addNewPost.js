@@ -8,6 +8,7 @@ import {config} from '../src/server/config.js';
 import siteData from '../data/site.json' assert {type: 'json'};
 
 let user;
+let searchResults;
 
 fs.readFile(config.googleUserFilePath, 'utf8', async (err, googleUser) => {
     if (err && err.message.indexOf('no such file or directory') > -1) {
@@ -18,6 +19,11 @@ fs.readFile(config.googleUserFilePath, 'utf8', async (err, googleUser) => {
     if (err) { console.error(err); return; }
 
     user = JSON.parse(googleUser);
+
+    // Get a new token and save it to our file in case we need to use it again soon
+    const token = await getNewToken(user.refreshToken)
+    user.token = token;
+    fs.writeFileSync('./data/googleUser', JSON.stringify(user));
 
 
     const albumId = config.albumID;
@@ -135,11 +141,7 @@ async function libraryApiSearch(authToken, parameters) {
             body: JSON.stringify(parameters)
           });
   
-        const result = await checkStatus(searchResponse, async () => {
-            return await libraryApiSearch(user.token, parameters);
-        });
-  
-        // console.log(`Response: ${result}`);
+        const result = await checkStatus(searchResponse);
   
         // The list of media items returned may be sparse and contain missing
         // elements. Remove all invalid elements.
@@ -234,8 +236,21 @@ async function libraryApiGetAlbums(authToken) {
     return {albums, error};
   }
 
+async function getNewToken(refreshToken) {
+    const oAuth2Client = new google.auth.OAuth2(
+        config.oAuthClientID, 
+        config.oAuthclientSecret, 
+        config.oAuthCallbackUrl,
+    );
+    oAuth2Client.setCredentials({
+        refresh_token: refreshToken,
+    });
+    const tokens = await oAuth2Client.refreshAccessToken();
+    return tokens.credentials.access_token;
+}
+
 // Return the body as JSON if the request was successful, or thrown a StatusError.
-async function checkStatus(response, retry){
+async function checkStatus(response){
     if (!response.ok){
         // Throw a StatusError if a non-OK HTTP status was returned.
         let message = "";
@@ -244,42 +259,6 @@ async function checkStatus(response, retry){
             message = await response.json();
         } catch( err ){
             // Ignore if no JSON payload was retrieved and use the status text instead.
-        }
-        if (response.status === 401) {
-            const oAuth2Client = new google.auth.OAuth2(
-                config.oAuthClientID, 
-                config.oAuthclientSecret, 
-                config.oAuthCallbackUrl,
-            );
-            oAuth2Client.setCredentials({
-                refresh_token: user.refreshToken,
-            });
-            const tokens = await oAuth2Client.refreshAccessToken();
-            console.log('YAYYYYYY! Token is refreshed!!!');
-
-            // // Use the refresh token to get a new authToken
-            // const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
-            //     method: 'post',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({
-            //         client_id: config.client_id,
-            //         client_secret: config.client_secret,
-            //         refresh_token: user.refreshToken,
-            //         grant_type: 'refresh_token',
-            //     })
-            // });
-
-            // console.log(tokenResponse);
-
-            // Save the new authToken to our user file
-            user.token = tokens.credentials.access_token;
-            fs.writeFileSync('./data/googleUser', JSON.stringify(user));
-            retry();
-            return;
-
-            throw new Error('auth token expired');
         }
         throw new Error('cannot parse response', response);
     }
