@@ -3,9 +3,9 @@ import {config} from '../config.js';
 
 export default (logger) => {
     return (req, res) => {
-        console.log(req.user);
         // Only allow login from one person
-        if (req.user.profile.displayName.toLowerCase() !== config.allowedDisplayName.toLowerCase()) {
+        if (req.user.profile.id !== config.allowedUserID.toLowerCase()) {
+            console.log('Unauthorized user tried to log in', req.user);
             res.redirect('/app');
             return;
         }
