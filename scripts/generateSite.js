@@ -19,7 +19,7 @@ partialsDirectoryFiles.forEach((fileName) => {
     const filePath = path.join(partialsDirectory, fileName);
     const stats = fs.statSync(filePath);
 
-    if (stats.isFile() && fileName.indexOf('.mustache') > -1) {
+    if (stats.isFile() && fileName.indexOf('.mst') > -1) {
         const partialPathInformation = path.parse(filePath);
         const fileContents = fs.readFileSync(filePath, 'utf8');
         partials[partialPathInformation.name] = fileContents;
@@ -31,7 +31,7 @@ siteData.posts.reverse();
 const nextPost = siteData.posts.length < 2
 ? null
 : siteData.posts[1];
-outputTemplateToFile('src/site/index.mustache', `${config.pathToWebRoot}/index.html`, {
+outputTemplateToFile('src/site/post.mst', `${config.pathToWebRoot}/index.html`, {
     ...siteData,
     posts: siteData.posts.slice(0, 10),
     post: siteData.posts.length ? siteData.posts[0] : null,
@@ -46,7 +46,7 @@ siteData.posts.forEach((post) => {
     const nextPost = i === siteData.posts.length
         ? null
         : siteData.posts[i + 1];
-    outputTemplateToFile('src/site/post.mustache', `${config.pathToWebRoot}/${post.url}`, {
+    outputTemplateToFile('src/site/post.mst', `${config.pathToWebRoot}/${post.url}`, {
         ...siteData,
         title: `${siteData.title} = ${post.title}`,
         post,

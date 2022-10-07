@@ -59,7 +59,7 @@ app.set('views', `${__dirname}/views`);
 app.get(`${config.appRoot}`, root);
 app.get(`${config.appRoot}/logout`, logout);
 
-// Star the OAuth login process for Google.
+// Start the OAuth login process for Google.
 app.get(`${config.appRoot}/auth/google`, authGoogle(passport));
 
 // Callback receiver for the OAuth process after log in.
