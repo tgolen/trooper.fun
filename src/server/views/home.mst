@@ -6,11 +6,46 @@
     </head>
     <body>
         <main class="container">
-            <h1>Home</h1>
-            <a href="/app/logout" class="waves-effect waves-light btn-large">
-                Logout
-                <i class="material-icons left">cancel</i>
-            </a>
+            <div class="row">
+                <div class="col s6">
+                    <h1>Home</h1>
+                </div>
+                <div class="col s6 right-align">
+                    <a href="/app/logout" class="waves-effect waves-light btn">
+                        Logout
+                        <i class="material-icons left">cancel</i>
+                    </a>
+                </div>
+            </div>
+
+            {{#posts}}
+            <div class="row">
+                <div class="col s2">
+                    <img class="responsive-img" src="/photos{{pathToImage}}" alt="{{title}}" height="100" width="100" />
+                </div>
+                <div class="col s10">
+                    <form method="post" action="">
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input type="text" id="title" value="{{title}}" />
+                                <label for="title">Title</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <input type="text" id="tags" value="{{tags}}" />
+                                <label for="tags">Tags</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <textarea id="description" class="materialize-textarea">{{description}}</textarea>
+                                <label for="description">Description</label>
+                            </div>
+                        </div>
+                        <button class="btn waves-effect waves-light btn-large" type="submit">Save</button>
+                    </form>
+                </div>
+            </div>
+            {{/posts}}
         </main>
     </body>
 </html>

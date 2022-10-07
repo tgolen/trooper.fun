@@ -5,6 +5,10 @@ export const config = {};
 
 config.googleUserFilePath = './data/googleUser';
 
+// The port where the app should listen for requests.
+config.port = process.env.SERVER_PORT;
+
+// The album with the photos in it we want to post
 config.albumID = 'APUIgiM1r4vrWZEibDLRAAmQJtm6JCqnugkcoRjwtkx4wC7WiCME9XpdOO2u_v-M0txx_n7OblT_';
 
 // The OAuth client ID from the Google Developers console.
@@ -15,16 +19,17 @@ config.oAuthclientSecret = process.env.GOOGLE_OAUTH_CLIENT_SECRET;
 
 // The callback to use for OAuth requests. This is the URL where the app is
 // running. For testing and running it locally, use 127.0.0.1.
-config.oAuthCallbackUrl = `${process.env.SERVER_URL_ROOT}${process.env.SERVER_APP_ROOT}/auth/google/callback`;
-
-// The port where the app should listen for requests.
-config.port = process.env.SERVER_PORT;
+config.oAuthCallbackUrl = config.port === '8080'
+    ? `${process.env.SERVER_URL_ROOT}:${config.port}${process.env.SERVER_APP_ROOT}/auth/google/callback`
+    : `${process.env.SERVER_URL_ROOT}${process.env.SERVER_APP_ROOT}/auth/google/callback`;
 
 config.urlRoot = process.env.SERVER_URL_ROOT;
 
 config.appRoot = process.env.SERVER_APP_ROOT;
 
-config.urlApp = `${process.env.SERVER_URL_ROOT}${process.env.SERVER_APP_ROOT}`;
+config.urlApp = config.port === '8080'
+    ? `${process.env.SERVER_URL_ROOT}:${config.port}${process.env.SERVER_APP_ROOT}`
+    : `${process.env.SERVER_URL_ROOT}${process.env.SERVER_APP_ROOT}`;
 
 config.pathToWebRoot = process.env.PATH_TO_WEB_ROOT;
 

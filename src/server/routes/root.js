@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { config } from '../config.js';
+import siteData from '../../../data/site.json' assert {type: 'json'};
 
 export default (req, res) => {
     fs.readFile(config.googleUserFilePath, 'utf8', (err, token) => {
@@ -17,6 +18,9 @@ export default (req, res) => {
             return;
         }
         
-        res.render('home');
+        res.render('home', {
+            ...siteData,
+            posts: siteData.posts.reverse(),
+        });
     });
 };
