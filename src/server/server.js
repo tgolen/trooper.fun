@@ -16,6 +16,7 @@ import logout from './routes/logout.js';
 import authGoogle from './routes/authGoogle.js';
 import authGoogleCallback from './routes/authGoogleCallback.js';
 import root from './routes/root.js';
+import savePost from './routes/savePost.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -57,6 +58,7 @@ app.set('view engine', 'mst');
 app.set('views', `${__dirname}/views`);
 
 app.get(`${config.appRoot}`, root);
+app.post(`${config.appRoot}/savePost`, savePost)
 app.get(`${config.appRoot}/logout`, logout);
 
 // Start the OAuth login process for Google.

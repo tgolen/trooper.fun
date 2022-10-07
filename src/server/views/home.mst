@@ -24,24 +24,24 @@
                     <img class="responsive-img" src="/photos{{pathToImage}}" alt="{{title}}" height="100" width="100" />
                 </div>
                 <div class="col s10">
-                    <form method="post" action="/app/savePost">
+                    <form method="post" action="/app/savePost" enctype="application/x-www-form-urlencoded">
                         <div class="row">
                             <div class="input-field col s6">
-                                <input type="text" id="title" value="{{title}}" />
+                                <input type="text" id="title" name="title" value="{{title}}" />
                                 <label for="title">Title</label>
                             </div>
                             <div class="input-field col s6">
-                                <input type="text" id="tags" value="{{tags}}" />
+                                <input type="text" id="tags" name="tags" value="{{tags}}" />
                                 <label for="tags">Tags</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <textarea id="description" class="materialize-textarea">{{description}}</textarea>
+                                <textarea id="description" name="description" class="materialize-textarea">{{description}}</textarea>
                                 <label for="description">Description</label>
                             </div>
                         </div>
-                        <input type="hidden" id="url" vlaue="{{url}}" />
+                        <input type="hidden" name="url" value="{{url}}" />
                         <button class="btn waves-effect waves-light btn-large" type="submit">Save</button>
                     </form>
                 </div>
