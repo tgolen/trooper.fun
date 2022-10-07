@@ -3,6 +3,7 @@ import {config} from '../config.js';
 
 export default (logger) => {
     return (req, res) => {
+        console.log(req.user);
         // Only allow login from one person
         if (req.user.profile.displayName.toLowerCase() !== config.allowedDisplayName.toLowerCase()) {
             res.redirect('/app');
