@@ -51,11 +51,15 @@ siteData.posts.map((post) => {
         : [];
     return post;
 });
+
 const tagsAndPosts = {};
 siteData.posts.forEach(post => {
     post.tagObjects.forEach(tagObject => {
         if (!tagsAndPosts[tagObject.tagName]) tagsAndPosts[tagObject.tagName] = [];
-        tagsAndPosts[tagObject.tagName].push(post);
+        tagsAndPosts[tagObject.tagName].push({
+            ...post,
+            url: `tag-${tagObject.tagName}-${post.url}`,
+        });
     });
 });
 
@@ -77,15 +81,39 @@ siteData.posts.forEach((post) => {
     });
     i++;
 });
-console.log(tagsAndPosts);
+// console.log(tagsAndPosts);
 
 // Create a landing page for each tag
 for (let cleanTag in tagsAndPosts) {
+    const nextPost = tagsAndPosts[cleanTag].length < 2
+    ? null
+    : tagsAndPosts[cleanTag][1];
     outputTemplateToFile('src/site/views/post.mst', `${config.pathToWebRoot}/tag-${cleanTag}.html`, {
         title: `Trooper.fun Photo Blog - ${cleanTag}`,
         heading: `Tag - ${cleanTag}`,
         posts: tagsAndPosts[cleanTag],
         post: tagsAndPosts[cleanTag][0],
+        nextPost,
+    });
+    let i = 0;
+    tagsAndPosts[cleanTag].forEach(tagObject => {
+        const post = tagsAndPosts[cleanTag][i];
+        const prevPost = i === 0
+            ? null
+            : tagsAndPosts[cleanTag][i - 1];
+        const nextPost = i === tagsAndPosts[cleanTag].length
+            ? null
+            : tagsAndPosts[cleanTag][i + 1];
+        outputTemplateToFile('src/site/views/post.mst', `${config.pathToWebRoot}/${post.url}`, {
+            ...siteData,
+            title: `${siteData.title} - ${cleanTag} - ${post.title}`,
+            heading: `Tag - ${cleanTag}`,
+            post,
+            prevPost,
+            nextPost,
+            posts: tagsAndPosts[cleanTag],
+        });
+        i++;
     });
 }
 
