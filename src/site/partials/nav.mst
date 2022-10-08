@@ -2,6 +2,9 @@
     {{#heading}}
         <h1>{{heading}}</h1>
     {{/heading}}
+    {{#subHeading}}
+        <h3>{{subHeading}}</h3>
+    {{/subHeading}}
     <ul>
         <li>
             <a href="index.html">

@@ -33,6 +33,8 @@ const nextPost = siteData.posts.length < 2
 : siteData.posts[1];
 outputTemplateToFile('src/site/views/post.mst', `${config.pathToWebRoot}/index.html`, {
     ...siteData,
+    heading: 'Home',
+    subHeading: nextPost && nextPost.title,
     posts: siteData.posts.slice(0, 10),
     post: siteData.posts.length ? siteData.posts[0] : null,
     nextPost,
@@ -74,6 +76,7 @@ siteData.posts.forEach((post) => {
     outputTemplateToFile('src/site/views/post.mst', `${config.pathToWebRoot}/${post.url}`, {
         ...siteData,
         title: `${siteData.title} = ${post.title}`,
+        heading: post.title,
         post,
         prevPost,
         nextPost,
@@ -91,6 +94,7 @@ for (let cleanTag in tagsAndPosts) {
     outputTemplateToFile('src/site/views/post.mst', `${config.pathToWebRoot}/tag-${cleanTag}.html`, {
         title: `Trooper.fun Photo Blog - ${cleanTag}`,
         heading: `Tag - ${cleanTag}`,
+        subHeading: nextPost && nextPost.title,
         posts: tagsAndPosts[cleanTag],
         post: tagsAndPosts[cleanTag][0],
         nextPost,
@@ -108,6 +112,7 @@ for (let cleanTag in tagsAndPosts) {
             ...siteData,
             title: `${siteData.title} - ${cleanTag} - ${post.title}`,
             heading: `Tag - ${cleanTag}`,
+            subHeading: post.title,
             post,
             prevPost,
             nextPost,
