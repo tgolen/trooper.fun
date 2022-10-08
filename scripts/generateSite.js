@@ -38,7 +38,27 @@ outputTemplateToFile('src/site/views/post.mst', `${config.pathToWebRoot}/index.h
     nextPost,
 });
 
+// Loop through each post to set it's tags
+siteData.posts.map((post) => {
+    post.tagObjects = post.tags 
+        ? post.tags.split(',').map(tag => {
+            const cleanTag = tag.replace(/\s/, '').toLowerCase();
+            return {
+                tagName: cleanTag,
+                tagUrl: `tag-${cleanTag}.html`
+            };
+        })
+        : [];
+    return post;
+});
 const tagsAndPosts = {};
+siteData.posts.forEach(post => {
+    post.tagObjects.forEach(tagObject => {
+        if (!tagsAndPosts[tagObject.tagName]) tagsAndPosts[tagObject.tagName] = [];
+        tagsAndPosts[tagObject.tagName].push(post);
+    });
+});
+
 let i = 0;
 siteData.posts.forEach((post) => {
     const prevPost = i === 0
@@ -47,17 +67,6 @@ siteData.posts.forEach((post) => {
     const nextPost = i === siteData.posts.length
         ? null
         : siteData.posts[i + 1];
-    const tags = post.tags 
-        ? post.tags.split(',').map(tag => {
-            const cleanTag = tag.replace(/\s/, '').toLowerCase();
-            if (!tagsAndPosts[cleanTag]) tagsAndPosts[cleanTag] = [];
-            tagsAndPosts[cleanTag].push(post);
-            return {
-                tag: cleanTag,
-                tagUrl: `tag-${cleanTag}.html`
-            };
-        })
-        : [];
     outputTemplateToFile('src/site/views/post.mst', `${config.pathToWebRoot}/${post.url}`, {
         ...siteData,
         title: `${siteData.title} = ${post.title}`,
@@ -65,7 +74,6 @@ siteData.posts.forEach((post) => {
         prevPost,
         nextPost,
         posts: siteData.posts.slice(0, 10),
-        tags,
     });
     i++;
 });
@@ -73,14 +81,11 @@ console.log(tagsAndPosts);
 
 // Create a landing page for each tag
 for (let cleanTag in tagsAndPosts) {
-    const nextPost = tagsAndPosts[cleanTag].length < 2
-    ? null
-    : tagsAndPosts[cleanTag][1];
     outputTemplateToFile('src/site/views/post.mst', `${config.pathToWebRoot}/tag-${cleanTag}.html`, {
         title: `Trooper.fun Photo Blog - ${cleanTag}`,
+        heading: `Tag - ${cleanTag}`,
         posts: tagsAndPosts[cleanTag],
         post: tagsAndPosts[cleanTag][0],
-        nextPost,
     });
 }
 
