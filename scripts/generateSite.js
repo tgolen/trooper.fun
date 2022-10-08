@@ -31,13 +31,14 @@ siteData.posts.reverse();
 const nextPost = siteData.posts.length < 2
 ? null
 : siteData.posts[1];
-outputTemplateToFile('src/site/post.mst', `${config.pathToWebRoot}/index.html`, {
+outputTemplateToFile('src/site/views/post.mst', `${config.pathToWebRoot}/index.html`, {
     ...siteData,
     posts: siteData.posts.slice(0, 10),
     post: siteData.posts.length ? siteData.posts[0] : null,
     nextPost,
 });
 
+const tagsAndPosts = {};
 let i = 0;
 siteData.posts.forEach((post) => {
     const prevPost = i === 0
@@ -46,16 +47,42 @@ siteData.posts.forEach((post) => {
     const nextPost = i === siteData.posts.length
         ? null
         : siteData.posts[i + 1];
-    outputTemplateToFile('src/site/post.mst', `${config.pathToWebRoot}/${post.url}`, {
+    const tags = post.tags 
+        ? post.tags.split(',').map(tag => {
+            const cleanTag = tag.replace(/\s/, '').toLowerCase();
+            if (!tagsAndPosts[cleanTag]) tagsAndPosts[cleanTag] = [];
+            tagsAndPosts[cleanTag].push(post);
+            return {
+                tag: cleanTag,
+                tagUrl: `tag-${cleanTag}.html`
+            };
+        })
+        : [];
+    outputTemplateToFile('src/site/views/post.mst', `${config.pathToWebRoot}/${post.url}`, {
         ...siteData,
         title: `${siteData.title} = ${post.title}`,
         post,
         prevPost,
         nextPost,
         posts: siteData.posts.slice(0, 10),
+        tags,
     });
     i++;
 });
+console.log(tagsAndPosts);
+
+// Create a landing page for each tag
+for (let cleanTag in tagsAndPosts) {
+    const nextPost = tagsAndPosts[cleanTag].length < 2
+    ? null
+    : tagsAndPosts[cleanTag][1];
+    outputTemplateToFile('src/site/views/post.mst', `${config.pathToWebRoot}/tag-${cleanTag}.html`, {
+        title: `Trooper.fun Photo Blog - ${cleanTag}`,
+        posts: tagsAndPosts[cleanTag],
+        post: tagsAndPosts[cleanTag][0],
+        nextPost,
+    });
+}
 
 function outputTemplateToFile(pathToTemplate, outputFilePath, data) {
     fs.readFile(pathToTemplate, 'utf8', (err, templateContents) => {

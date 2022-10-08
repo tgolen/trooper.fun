@@ -20,5 +20,11 @@
         </div>
         
         <img class="responsive-img" src="./{{post.pathToImage}}" alt="{{post.title}}" />
+
+        <p>
+            {{#tags}}
+                <a href="{{tagUrl}}">#{{tag}}</a>
+            {{/tags}}
+        </p>
     </p>
 </div>
