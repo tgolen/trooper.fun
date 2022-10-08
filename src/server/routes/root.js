@@ -1,6 +1,5 @@
 import fs from 'fs';
 import { config } from '../config.js';
-import siteData from '../../../data/site.json' assert {type: 'json'};
 
 export default (req, res) => {
     fs.readFile(config.googleUserFilePath, 'utf8', (err, token) => {
@@ -17,10 +16,13 @@ export default (req, res) => {
             res.render('login');
             return;
         }
-        
-        res.render('home', {
-            ...siteData,
-            posts: siteData.posts.reverse(),
+        fs.readFile(config.siteDataFilePath, 'utf8', async (err, content) => {
+            const siteData = JSON.parse(content);
+            const postsCopy = [].concat(siteData.posts);
+            res.render('home', {
+                ...siteData,
+                posts: postsCopy.reverse(),
+            });
         });
     });
 };

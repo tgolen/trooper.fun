@@ -4,6 +4,7 @@ dotenv.config();
 export const config = {};
 
 config.googleUserFilePath = './data/googleUser';
+config.siteDataFilePath = './data/site.json';
 
 // The port where the app should listen for requests.
 config.port = process.env.SERVER_PORT;
