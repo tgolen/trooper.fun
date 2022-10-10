@@ -29,7 +29,7 @@
 
         {{#post.description}}
             <p>
-                {{post.description}}
+                {{{post.description}}}
             </p>
         {{/post.description}}
     </p>
