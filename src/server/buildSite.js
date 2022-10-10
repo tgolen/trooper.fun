@@ -69,8 +69,7 @@ export default () => {
             : null;
         outputTemplateToFile('src/site/views/post.mst', `${config.pathToWebRoot}/index.html`, {
             ...siteData,
-            heading: 'Home',
-            subHeading: post && post.title,
+            heading: post && post.title,
             posts: siteData.posts.slice(0, 10),
             post,
             nextPost,
