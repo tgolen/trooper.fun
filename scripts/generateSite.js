@@ -28,21 +28,6 @@ partialsDirectoryFiles.forEach((fileName) => {
 
 siteData.posts.reverse();
 
-const nextPost = siteData.posts.length < 2
-    ? null
-    : siteData.posts[1];
-const post = siteData.posts.length 
-    ? siteData.posts[0] 
-    : null;
-outputTemplateToFile('src/site/views/post.mst', `${config.pathToWebRoot}/index.html`, {
-    ...siteData,
-    heading: 'Home',
-    subHeading: post && post.title,
-    posts: siteData.posts.slice(0, 10),
-    post,
-    nextPost,
-});
-
 // Loop through each post to set it's tags
 siteData.posts.map((post) => {
     post.tagObjects = post.tags 
@@ -57,6 +42,7 @@ siteData.posts.map((post) => {
     return post;
 });
 
+// Group all of our posts by their tags
 const tagsAndPosts = {};
 siteData.posts.forEach(post => {
     post.tagObjects.forEach(tagObject => {
@@ -66,6 +52,21 @@ siteData.posts.forEach(post => {
             url: `tag-${tagObject.tagName}-${post.url}`,
         });
     });
+});
+
+const nextPost = siteData.posts.length < 2
+    ? null
+    : siteData.posts[1];
+const post = siteData.posts.length 
+    ? siteData.posts[0] 
+    : null;
+outputTemplateToFile('src/site/views/post.mst', `${config.pathToWebRoot}/index.html`, {
+    ...siteData,
+    heading: 'Home',
+    subHeading: post && post.title,
+    posts: siteData.posts.slice(0, 10),
+    post,
+    nextPost,
 });
 
 let i = 0;
