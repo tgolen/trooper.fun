@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { config } from '../config.js';
+import buildSite from '../buildSite.js';
 
 export default (req, res) => {
     if (req.body.url) {
@@ -19,6 +20,7 @@ export default (req, res) => {
                 }),
             };
             fs.writeFileSync(config.siteDataFilePath, JSON.stringify(newSiteData, null, 4));
+            buildSite();
         });
     }
     
