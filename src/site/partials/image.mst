@@ -26,5 +26,11 @@
                 <a href="{{tagUrl}}">#{{tagName}}</a>
             {{/post.tagObjects}}
         </p>
+
+        {{#post.description}}
+            <p>
+                {{post.description}}
+            </p>
+        {{/post.description}}
     </p>
 </div>
