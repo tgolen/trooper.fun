@@ -29,14 +29,17 @@ partialsDirectoryFiles.forEach((fileName) => {
 siteData.posts.reverse();
 
 const nextPost = siteData.posts.length < 2
-? null
-: siteData.posts[1];
+    ? null
+    : siteData.posts[1];
+const post = siteData.posts.length 
+    ? siteData.posts[0] 
+    : null;
 outputTemplateToFile('src/site/views/post.mst', `${config.pathToWebRoot}/index.html`, {
     ...siteData,
     heading: 'Home',
-    subHeading: nextPost && nextPost.title,
+    subHeading: post && post.title,
     posts: siteData.posts.slice(0, 10),
-    post: siteData.posts.length ? siteData.posts[0] : null,
+    post,
     nextPost,
 });
 
