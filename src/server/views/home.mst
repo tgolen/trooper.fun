@@ -2,7 +2,7 @@
     <head>
         <title>Home</title>
 
-        {{> head}} 
+        {{> head}}
     </head>
     <body>
         <main class="container">
@@ -49,4 +49,5 @@
             {{/posts}}
         </main>
     </body>
+    {{> foot}}
 </html>
