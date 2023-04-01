@@ -49,5 +49,4 @@
             {{/posts}}
         </main>
     </body>
-    {{> foot}}
 </html>
