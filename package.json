@@ -33,6 +33,7 @@
     "post": "node scripts/addNewPost.js",
     "post-and-build": "node scripts/addNewPost.js ; node scripts/generateSite.js",
     "start": "node index.js",
+    "pushimages": "scp -r ~/Downloads/trooper root@trooper.fun:/home/tgolen/trooper.fun/data/images_to_add",
     "deploy": "scp -r ./src root@trooper.fun:/home/tgolen/trooper.fun && scp -r ./scripts root@trooper.fun:/home/tgolen/trooper.fun"
   },
   "repository": {

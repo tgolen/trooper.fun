@@ -1,5 +1,6 @@
 import fs from "fs";
 import moment from "moment";
+import { config } from "../src/server/config.js";
 
 import siteData from "../data/site.json" assert { type: "json" };
 
@@ -29,6 +30,14 @@ function addNewImageToSiteData(imagePath) {
   siteData.posts.push(newPost);
 }
 
+function copyNewImageToPhotos(imagePath) {
+  const fileNameArray = imagePath.split("/");
+  const fileName = fileNameArray[fileNameArray.length - 1];
+  const destinationPath = `${config.pathToWebRoot}/photos/${fileName}`;
+  console.log(`Copying new image to photos: ${destinationPath}`);
+  fs.copyFileSync(imagePath, destinationPath);
+}
+
 function writeSiteData() {
   console.log("Writing site data to file");
   const data = JSON.stringify(siteData, null, 4);
@@ -48,6 +57,7 @@ function run() {
   }
 
   addNewImageToSiteData(imagePath);
+  copyNewImageToPhotos(imagePath);
   writeSiteData();
   deleteNewlyAddedImage(imagePath);
 }
