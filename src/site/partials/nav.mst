@@ -13,9 +13,14 @@
         </li>
         {{#posts}}
         <li>
-            <a href="{{url}}">
-                {{title}}
-            </a>
+            {{#isCurrent}}
+                <strong>{{title}}</strong>
+            {{/isCurrent}}
+            {{^isCurrent}}
+                <a href="{{url}}">
+                    {{title}}
+                </a>
+            {{/isCurrent}}
         </li>
         {{/posts}}
     </ul>

@@ -70,7 +70,10 @@ export default () => {
       {
         ...siteData,
         heading: post && post.title,
-        posts: siteData.posts.slice(0, 10),
+        posts: siteData.posts.slice(0, 10).map((p, index) => ({
+          ...p,
+          isCurrent: index === 0,
+        })),
         post,
         nextPost,
       }
@@ -88,7 +91,10 @@ export default () => {
         const postsToShow = 10;
 
         if (totalPosts <= postsToShow) {
-          return posts;
+          return posts.map((p, index) => ({
+            ...p,
+            isCurrent: index === currentIndex,
+          }));
         }
 
         const middleIndex = Math.floor(postsToShow / 2);
@@ -100,7 +106,10 @@ export default () => {
           startIndex = Math.max(0, endIndex - postsToShow);
         }
 
-        return posts.slice(startIndex, endIndex);
+        return posts.slice(startIndex, endIndex).map((p, index) => ({
+          ...p,
+          isCurrent: startIndex + index === currentIndex,
+        }));
       };
 
       outputTemplateToFile(
